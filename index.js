@@ -1,33 +1,59 @@
 var postcss = require('postcss');
 
-module.exports = postcss.plugin('postcss-responsive-properties', function (opts) {
-    opts = opts || {};
+function createMediaRule(root, r) {
+    var createNewAR = true;
 
-    // Work with options here
+    root.walkAtRules(function(atrule) {
+        if (atrule.params === r.breakpoint) {
+            atrule.append(r);
+            createNewAR = false;
+        }
+    });
 
-    return function (css, result) {
- 		
-        var options = options || {};
+    if (createNewAR) {
+        var ar = postcss.atRule({
+            type: 'atrule',
+            name: 'media',
+            params: r.breakpoint
+        });
+        ar.append(r);
+        root.append(ar);
+    }
+}
+
+module.exports = postcss.plugin('postcss-responsive-properties', function () {
+    return function (css) {
         var root = css.root();
 
- 		css.walkRules(function(rule) {
+        css.walkRules(function (rule, i) {
+            if (rule.selector.indexOf(':') === rule.selector.length - 1) {
 
-			if (rule.selector.indexOf(":") === rule.selector.length - 1) {
-			    var parentProperty = rule;
+                rule.walkDecls(function (decl, i) {
+                    if (i === 0 || decl.type === 'comment') return;
 
-	 			rule.each(function(decl, i) {
-                    if (i === 0 || decl.type === "comment") {
-                        return;
-                    }
-	 				var selector   = decl.parent.parent.selector;
-	 				var breakpoint = !isNaN(decl.prop) ? decl.prop + "px" : "$" + decl.prop;
-	 				var property   = decl.parent.selector;
-	 				var value      = decl.value + ";";
+                    var r = postcss.rule({
+                        type: 'rule',
+                        selector: decl.parent.parent.selector,
+                        breakpoint: 'screen and (min-width: ' + (!isNaN(decl.prop) ? parseInt(decl.prop) + 'px' : '$' + decl.prop) + ')',
+                        raws: {
+                            semicolon: true
+                        }
+                    });
+                    r.append({
+                        type: 'decl',
+                        prop: decl.parent.selector.slice(0, -1),
+                        value: decl.value
+                    });
 
-	 				root.append("@media screen and (min-width: " + breakpoint + ") {"+ selector + " {" + property.slice(0, -1) + ": " + value + ";" + "} }");
-	 			});
-	 			parentProperty.replaceWith({prop: rule.selector.slice(0, -1), value: rule.nodes[0].value + ";"});
-			}
- 		});
-    }
+                    createMediaRule(root, r);
+                });
+
+                rule.replaceWith({
+                    type: 'decl',
+                    prop: rule.selector.slice(0, -1),
+                    value: rule.nodes[0].value + ';'
+                });
+            }
+        });
+    };
 });
