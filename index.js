@@ -3,7 +3,7 @@ var postcss = require('postcss');
 function createMediaRule(root, r) {
     var createNewAR = true;
 
-    root.walkAtRules(function(atrule) {
+    root.walkAtRules(function (atrule) {
         if (atrule.params === r.breakpoint) {
             atrule.append(r);
             createNewAR = false;
@@ -25,7 +25,7 @@ module.exports = postcss.plugin('postcss-responsive-properties', function () {
     return function (css) {
         var root = css.root();
 
-        css.walkRules(function (rule, i) {
+        css.walkRules(function (rule) {
             if (rule.selector.indexOf(':') === rule.selector.length - 1) {
 
                 rule.walkDecls(function (decl, i) {
@@ -34,7 +34,10 @@ module.exports = postcss.plugin('postcss-responsive-properties', function () {
                     var r = postcss.rule({
                         type: 'rule',
                         selector: decl.parent.parent.selector,
-                        breakpoint: 'screen and (min-width: ' + (!isNaN(decl.prop) ? parseInt(decl.prop) + 'px' : '$' + decl.prop) + ')',
+                        breakpoint: 'screen and (min-width: ' +
+                            (!isNaN(decl.prop) ?
+                                parseInt(decl.prop) + 'px' :
+                                '$' + decl.prop) + ')',
                         raws: {
                             semicolon: true
                         }
