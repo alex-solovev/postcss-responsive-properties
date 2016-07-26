@@ -49,7 +49,7 @@ npm i postcss postcss-responsive-properties postcss-merge-rules --save-dev
 ```
 
 #### Using with PostCSS:
-```
+```js
 var postcss = require("postcss"),
     mergerules = require("postcss-merge-rules"), // this dependency needed for clean-up plugin output
     variables = require("postcss-simple-vars"), // you also need this plugin for using variables in properties
