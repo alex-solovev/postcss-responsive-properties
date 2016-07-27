@@ -12,7 +12,8 @@
 $desktop: 992px;
 
 body {
-  font-size: {
+  color: red;   
+  @font-size: {
     default: 1em;
     desktop: 1.5em;
     1600: 2em;
@@ -25,6 +26,7 @@ body {
 #### Output:
 ```css
 body {
+  color: red;
   font-size: 1em;
 }
 
@@ -45,7 +47,7 @@ body {
 
 Install postcss and postcss-responsive-properties to your project:
 ```
-npm i postcss postcss-responsive-properties postcss-merge-rules --save-dev
+npm i postcss postcss-responsive-properties postcss-merge-rules --save
 ```
 
 #### Using with PostCSS:
@@ -53,7 +55,7 @@ npm i postcss postcss-responsive-properties postcss-merge-rules --save-dev
 var postcss = require("postcss"),
     mergerules = require("postcss-merge-rules"), // this dependency needed for clean-up plugin output
     variables = require("postcss-simple-vars"), // you also need this plugin for using variables in properties
-    responsiveCSSProperties = require("postcss-responsive-css-properties");
+    responsiveCSSProperties = require("postcss-responsive-properties");
 
 postcss([
         responsiveCSSProperties,
@@ -73,7 +75,7 @@ var gulp = require("gulp"),
     postcss = require("gulp-postcss"),
     mergerules = require("postcss-merge-rules"), // this dependency needed for clean-up plugin output
     variables = require("postcss-simple-vars"), // you also need this plugin for using variables in properties
-    responsiveCSSProperties = require("postcss-responsive-css-properties");
+    responsiveCSSProperties = require("postcss-responsive-properties");
 
 gulp.task("styles", function() {
     var processors = [
@@ -86,12 +88,6 @@ gulp.task("styles", function() {
         .pipe(postcss(processors).on("error", function(err) { console.log(err)}))
         .pipe(gulp.dest("[output-file].css"));
 });
-
-gulp.task("watch", function() {
-    gulp.watch("[input-file].css", ["styles"]);
-});
-
-gulp.task("default", ["styles", "watch"]);
 ```
 
 See [PostCSS] docs for examples for your environment.
