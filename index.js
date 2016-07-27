@@ -25,8 +25,8 @@ module.exports = postcss.plugin('postcss-responsive-properties', function () {
     return function (css) {
         var root = css.root();
 
-        css.walkRules(function (rule) {
-            if (rule.selector.indexOf(':') === rule.selector.length - 1) {
+        css.walkAtRules(function (rule) {
+            if (rule.name.indexOf(':') === rule.name.length - 1) {
 
                 rule.walkDecls(function (decl, i) {
                     if (i === 0 || decl.type === 'comment') return;
@@ -44,7 +44,7 @@ module.exports = postcss.plugin('postcss-responsive-properties', function () {
                     });
                     r.append({
                         type: 'decl',
-                        prop: decl.parent.selector.slice(0, -1),
+                        prop: decl.parent.name.slice(0, -1),
                         value: decl.value
                     });
 
@@ -53,7 +53,7 @@ module.exports = postcss.plugin('postcss-responsive-properties', function () {
 
                 rule.replaceWith({
                     type: 'decl',
-                    prop: rule.selector.slice(0, -1),
+                    prop: rule.name.slice(0, -1),
                     value: rule.nodes[0].value + ';'
                 });
             }
