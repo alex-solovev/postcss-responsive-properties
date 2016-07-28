@@ -47,7 +47,7 @@ body {
 
 Install postcss and postcss-responsive-properties to your project:
 ```
-npm i postcss postcss-responsive-properties postcss-merge-rules --save
+npm i postcss postcss-responsive-properties postcss-merge-rules postcss-simple-vars --save
 ```
 
 #### Using with PostCSS:
