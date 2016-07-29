@@ -30,17 +30,17 @@ module.exports = postcss.plugin('postcss-responsive-properties', function () {
 
                 rule.walkDecls(function (decl, i) {
                     if (i === 0 || decl.type === 'comment') return;
-
                     var r = postcss.rule({
                         type: 'rule',
                         selector: decl.parent.parent.selector,
                         breakpoint: 'screen and (min-width: ' +
-                            (!isNaN(decl.prop) ?
-                                parseInt(decl.prop) + 'px' :
-                                '$' + decl.prop) + ')',
+                        (!isNaN(decl.prop) ?
+                        parseInt(decl.prop) + 'px' :
+                        '$' + decl.prop) + ')',
                         raws: {
                             semicolon: true
-                        }
+                        },
+                        source: decl.source
                     });
                     r.append({
                         type: 'decl',
