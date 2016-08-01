@@ -70,6 +70,11 @@ postcss([
 ```
 
 #### Using with gulp:
+
+```
+npm i gulp gulp-postcss postcss-responsive-properties postcss-merge-rules postcss-simple-vars --save
+```
+
 ```js
 var gulp = require("gulp"),
     postcss = require("gulp-postcss"),
