@@ -46,7 +46,7 @@ module.exports = postcss.plugin('postcss-responsive-properties', function () {
                         type: 'decl',
                         prop: decl.parent.name.slice(0, -1),
                         value: decl.value,
-                        important: decl.important,
+                        important: decl.important
                     });
 
                     createMediaRule(root, r);
