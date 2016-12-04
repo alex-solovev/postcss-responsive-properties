@@ -1,6 +1,6 @@
 {
   "name": "postcss-responsive-properties",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "PostCSS plugin that will make writing responsive style more easily",
   "keywords": [
     "postcss",
