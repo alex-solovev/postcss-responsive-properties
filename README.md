@@ -9,13 +9,11 @@
 
 #### Input:
 ```css
-$desktop: 992px;
-
 body {
-  color: red;   
-  @font-size: {
-    default: 1em;
-    desktop: 1.5em;
+  color: red;
+  font-size: {
+    0: 1em;
+    $tablet: 1.5em; /* use it with variables */
     1600: 2em;
   }
 }
@@ -27,10 +25,10 @@ body {
 ```css
 body {
   color: red;
-  font-size: 1em;
+  font-size: 1em
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: $tablet) { /* use it with variables */
   body {
     font-size: 1.5em;
   }
@@ -47,21 +45,15 @@ body {
 
 Install postcss and postcss-responsive-properties to your project:
 ```
-npm i postcss postcss-responsive-properties postcss-merge-rules postcss-simple-vars --save
+npm i postcss postcss-responsive-properties --save
 ```
 
 #### Using with PostCSS:
 ```js
 var postcss = require("postcss"),
-    mergerules = require("postcss-merge-rules"), // this dependency needed for clean-up plugin output
-    variables = require("postcss-simple-vars"), // you also need this plugin for using variables in properties
     responsiveCSSProperties = require("postcss-responsive-properties");
 
-postcss([
-        responsiveCSSProperties,
-        variables,
-        mergerules
-    ])
+postcss([ responsiveCSSProperties ])
     .process(css, { from: "src/input.css", to: "dist/output.css" })
     .then(function (result) {
         fs.writeFileSync("dist/output.css", result.css);
@@ -72,26 +64,20 @@ postcss([
 #### Using with gulp:
 
 ```
-npm i gulp gulp-postcss postcss-responsive-properties postcss-merge-rules postcss-simple-vars --save
+npm i gulp gulp-postcss postcss-responsive-properties --save
 ```
 
 ```js
 var gulp = require("gulp"),
     postcss = require("gulp-postcss"),
-    mergerules = require("postcss-merge-rules"), // this dependency needed for clean-up plugin output
-    variables = require("postcss-simple-vars"), // you also need this plugin for using variables in properties
     responsiveCSSProperties = require("postcss-responsive-properties");
 
 gulp.task("styles", function() {
-    var processors = [
-        responsiveCSSProperties,
-        variables,
-        mergerules
-    ];
+    var processors = [ responsiveCSSProperties ];
 
-    return gulp.src("[input-file].css")
+    return gulp.src("src/input.css")
         .pipe(postcss(processors).on("error", function(err) { console.log(err)}))
-        .pipe(gulp.dest("[output-file].css"));
+        .pipe(gulp.dest("dist/output.css"));
 });
 ```
 
