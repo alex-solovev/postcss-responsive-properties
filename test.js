@@ -38,7 +38,7 @@ test('does not change commented blocks output', t => {
     );
 });
 
-test('keeps properties with no breakpoint shortcuts', t => {
+test('does not change properties with no breakpoint shortcuts', t => {
     return run(
         t,
         'a {font-size:{ 0: 14px; 768: 16px; 1600: 19px; } color: red;}',
@@ -61,3 +61,15 @@ test('compiles multiple properties', t => {
     );
 });
 
+test('compiles multiple selectors with breakpoint shortcuts', t => {
+    return run(
+        t,
+        'a {font-size:{ 0: 14px; 768: 16px; 1600: 19px; }} ' +
+        'p {font-size:{ 0: 12px; 768: 14px; 1600: 16px; }}',
+        'a {font-size: 14px} p {font-size: 12px} ' +
+        '@media screen and (min-width: 768px) ' +
+        '{a {font-size: 16px;}p {font-size: 14px;}} ' +
+		'@media screen and (min-width: 1600px) ' +
+        '{a {font-size: 19px;}p {font-size: 16px;}}'
+    );
+});

@@ -6,11 +6,17 @@ function appendRule(atRule, r, forceAppend) {
         return;
     }
 
+    var createNewSelector = true;
     atRule.walkRules(function (rule) {
         if (rule.selector === r.selector) {
             rule.append(r.nodes[0]);
+            createNewSelector = false;
         }
     });
+
+    if (createNewSelector) {
+        atRule.append(r);
+    }
 }
 
 function createMediaRule(root, r) {
