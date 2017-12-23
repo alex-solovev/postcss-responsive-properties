@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/alexandr-solovyov/postcss-responsive-properties",
   "dependencies": {
-    "postcss": "^5.1.0",
+    "postcss": "^6.0.14",
     "postcss-merge-rules": "^2.0.10"
   },
   "devDependencies": {
