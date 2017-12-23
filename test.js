@@ -38,14 +38,13 @@ test('does not change commented blocks output', t => {
     );
 });
 
-test('does not change properties with no breakpoint shortcuts', t => {
+test('does not change properties with no breakpoint shortcuts', t 	=> {
     return run(
         t,
         'a {font-size:{ 0: 14px; 768: 16px; 1600: 19px; } color: red;}',
         'a {font-size: 14px; color: red;}' +
-		'@media screen and (min-width: 768px) ' +
-        '{a {font-size: 16px;}}@media screen and (min-width: 1600px) ' +
-        '{a {font-size: 19px;}}'
+        '@media screen and (min-width: 768px) {a {font-size: 16px;}}' +
+        '@media screen and (min-width: 1600px) {a {font-size: 19px;}}'
     );
 });
 
@@ -54,9 +53,10 @@ test('compiles multiple properties', t => {
         t,
         'a {font-size:{ 0: 14px; 768: 16px; 1600: 19px; } ' +
 		'color:{ 0: red; 768: blue; 1600: green }}',
-        'a {font-size: 14px; color: red}@media screen and (min-width: 768px) ' +
+        'a {font-size: 14px; color: red}' +
+        '@media screen and (min-width: 768px) ' +
         '{a {font-size: 16px;color: blue;}}' +
-		'@media screen and (min-width: 1600px) ' +
+        '@media screen and (min-width: 1600px) ' +
         '{a {font-size: 19px;color: green;}}'
     );
 });
@@ -69,7 +69,7 @@ test('compiles multiple selectors with breakpoint shortcuts', t => {
         'a {font-size: 14px} p {font-size: 12px} ' +
         '@media screen and (min-width: 768px) ' +
         '{a {font-size: 16px;}p {font-size: 14px;}} ' +
-		'@media screen and (min-width: 1600px) ' +
+        '@media screen and (min-width: 1600px) ' +
         '{a {font-size: 19px;}p {font-size: 16px;}}'
     );
 });
