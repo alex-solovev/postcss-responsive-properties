@@ -1,86 +1,94 @@
-var postcss = require('postcss');
+const postcss = require('postcss');
 
 function appendRule(atRule, r, forceAppend) {
-    if (forceAppend) {
-        atRule.append(r);
-        return;
-    }
+  if (forceAppend) {
+    atRule.append(r);
+    return;
+  }
 
-    var createNewSelector = true;
-    atRule.walkRules(function (rule) {
-        if (rule.selector === r.selector) {
-            rule.append(r.nodes[0]);
-            createNewSelector = false;
-        }
-    });
+  let createNewSelector = true;
 
-    if (createNewSelector) {
-        atRule.append(r);
+  atRule.walkRules(function (rule) {
+    if (rule.selector === r.selector) {
+      rule.append(r.nodes[0]);
+      createNewSelector = false;
     }
+  });
+
+  if (createNewSelector) {
+    atRule.append(r);
+  }
 }
 
 function createMediaRule(root, r) {
-    var createNewAR = true;
+  let createNewAR = true;
 
-    root.walkAtRules(function (atrule) {
-        if (atrule.params === r.breakpoint) {
-            appendRule(atrule, r);
-            createNewAR = false;
-        }
+  root.walkAtRules(function (atrule) {
+    if (atrule.params === r.breakpoint) {
+      appendRule(atrule, r);
+      createNewAR = false;
+    }
+  });
+
+  if (createNewAR) {
+    const ar = postcss.atRule({
+      type: 'atrule',
+      name: 'media',
+      params: r.breakpoint
     });
 
-    if (createNewAR) {
-        var ar = postcss.atRule({
-            type: 'atrule',
-            name: 'media',
-            params: r.breakpoint
-        });
-        appendRule(ar, r, true);
-        root.append(ar);
-    }
+    appendRule(ar, r, true);
+    root.append(ar);
+  }
 }
 
-module.exports = postcss.plugin('postcss-responsive-properties', function () {
-    return function (css) {
-        var root = css.root();
+const plugin = () => {
+  return {
+    postcssPlugin: 'postcss-responsive-properties',
+    Once(root) {
+      root.walkRules(function (rule) {
+        if (rule.selector.indexOf(':') === rule.selector.length - 1) {
+          rule.walkDecls(function (decl) {
+            if (decl.prop === '0' || decl.type === 'comment') return;
 
-        css.walkRules(function (rule) {
-            if (rule.selector.indexOf(':') === rule.selector.length - 1) {
+            const r = postcss.rule({
+              type: 'rule',
+              selector: decl.parent.parent.selector,
+              breakpoint:
+                'screen and (min-width: ' +
+                (Number.isFinite(decl.prop) ? Number.parseInt(decl.prop) + 'px' : decl.prop) +
+                ')',
+              raws: {
+                semicolon: true,
+                before: rule.raws.before.replace(/\n/, '\n')
+              },
+              source: decl.source
+            });
 
-                rule.walkDecls(function (decl) {
-                    if (decl.prop === '0' || decl.type === 'comment') return;
+            r.append({
+              type: 'decl',
+              prop: decl.parent.selector.slice(0, -1),
+              value: decl.value,
+              important: decl.important
+            });
 
-                    var r = postcss.rule({
-                        type: 'rule',
-                        selector: decl.parent.parent.selector,
-                        breakpoint: 'screen and (min-width: ' +
-                        (!isNaN(decl.prop) ?
-                            parseInt(decl.prop) + 'px' :
-                            decl.prop) + ')',
-                        raws: {
-                            semicolon: true,
-                            before: rule.raws.before.replace(/\n/, '\n')
-                        },
-                        source: decl.source
-                    });
+            createMediaRule(root, r);
+          });
 
-                    r.append({
-                        type: 'decl',
-                        prop: decl.parent.selector.slice(0, -1),
-                        value: decl.value,
-                        important: decl.important
-                    });
+          rule.replaceWith(
+            postcss.decl({
+              type: 'decl',
+              prop: rule.selector.slice(0, -1),
+              value: rule.nodes[0].value,
+              important: rule.nodes[0].important
+            })
+          );
+        }
+      });
+    }
+  };
+};
 
-                    createMediaRule(root, r);
-                });
+plugin.postcss = true;
 
-                rule.replaceWith(postcss.decl({
-                    type: 'decl',
-                    prop: rule.selector.slice(0, -1),
-                    value: rule.nodes[0].value,
-                    important: rule.nodes[0].important
-                }));
-            }
-        });
-    };
-});
+module.exports = plugin;
