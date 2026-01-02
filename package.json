@@ -16,7 +16,6 @@
     "url": "https://github.com/alexandr-solovyov/postcss-responsive-properties/issues"
   },
   "homepage": "https://github.com/alexandr-solovyov/postcss-responsive-properties",
-  "packageManager": "pnpm@10.27.0",
   "dependencies": {
     "postcss": "^8.5.6"
   },
