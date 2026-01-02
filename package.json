@@ -16,13 +16,14 @@
     "url": "https://github.com/alexandr-solovyov/postcss-responsive-properties/issues"
   },
   "homepage": "https://github.com/alexandr-solovyov/postcss-responsive-properties",
+  "packageManager": "pnpm@10.27.0",
   "dependencies": {
-    "postcss": "^6.0.14"
+    "postcss": "^8.5.6"
   },
   "devDependencies": {
-    "ava": "^0.15.2",
-    "eslint": "3.0.0",
-    "eslint-config-postcss": "^2.0.2"
+    "ava": "^6.4.1",
+    "eslint": "9.39.2",
+    "eslint-config-postcss": "^4.0.0"
   },
   "scripts": {
     "test": "ava && eslint *.js"
