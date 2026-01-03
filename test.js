@@ -3,12 +3,10 @@ import test    from 'ava';
 
 import plugin from './';
 
-function run(t, input, output, opts = { }) {
-    return postcss([ plugin(opts) ]).process(input)
-        .then( result => {
-            t.deepEqual(result.css, output);
-            t.deepEqual(result.warnings().length, 0);
-        });
+async function run(t, input, output, opts = { }) {
+    const result_1 = await postcss([plugin(opts)]).process(input);
+    t.deepEqual(result_1.css, output);
+    t.deepEqual(result_1.warnings().length, 0);
 }
 
 test('compiles breakpoints shortcuts to @media rules', t => {
