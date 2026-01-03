@@ -1,4 +1,4 @@
-const postcss = require('postcss');
+import { atRule as _atRule, rule as _rule, decl as _decl } from 'postcss';
 
 function appendRule(atRule, r, forceAppend) {
   if (forceAppend) {
@@ -31,7 +31,7 @@ function createMediaRule(root, r) {
   });
 
   if (createNewAR) {
-    const ar = postcss.atRule({
+    const ar = _atRule({
       type: 'atrule',
       name: 'media',
       params: r.breakpoint
@@ -51,12 +51,12 @@ const plugin = () => {
           rule.walkDecls(function (decl) {
             if (decl.prop === '0' || decl.type === 'comment') return;
 
-            const r = postcss.rule({
+            const r = _rule({
               type: 'rule',
               selector: decl.parent.parent.selector,
               breakpoint:
                 'screen and (min-width: ' +
-                (Number.isFinite(decl.prop) ? Number.parseInt(decl.prop) + 'px' : decl.prop) +
+                (Number.isNaN(decl.prop) ? Number.parseInt(decl.prop) + 'px' : decl.prop) +
                 ')',
               raws: {
                 semicolon: true,
@@ -76,7 +76,7 @@ const plugin = () => {
           });
 
           rule.replaceWith(
-            postcss.decl({
+            _decl({
               type: 'decl',
               prop: rule.selector.slice(0, -1),
               value: rule.nodes[0].value,
@@ -91,4 +91,4 @@ const plugin = () => {
 
 plugin.postcss = true;
 
-module.exports = plugin;
+export default plugin;
