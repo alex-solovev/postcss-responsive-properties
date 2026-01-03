@@ -2,6 +2,7 @@
   "name": "postcss-responsive-properties",
   "version": "1.0.0",
   "description": "PostCSS plugin that will make writing responsive style more easily",
+  "type": "module",
   "keywords": [
     "postcss",
     "css",
@@ -16,13 +17,14 @@
     "url": "https://github.com/alexandr-solovyov/postcss-responsive-properties/issues"
   },
   "homepage": "https://github.com/alexandr-solovyov/postcss-responsive-properties",
-  "dependencies": {
-    "postcss": "^8.5.6"
-  },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "ava": "^6.4.1",
-    "eslint": "9.39.2",
-    "eslint-config-postcss": "^4.0.0"
+    "eslint": "^9.39.2",
+    "eslint-config-postcss": "^4.0.0",
+    "globals": "^17.0.0",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1"
   },
   "scripts": {
     "test": "ava && eslint *.js"
