@@ -18,13 +18,12 @@
   },
   "homepage": "https://github.com/alexandr-solovyov/postcss-responsive-properties",
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
     "ava": "^6.4.1",
     "eslint": "^9.39.2",
-    "eslint-config-postcss": "^4.0.0",
-    "globals": "^17.0.0",
-    "postcss": "^8.5.6",
-    "postcss-cli": "^11.0.1"
+    "eslint-config-postcss": "^4.0.0"
+  },
+  "dependencies": {
+    "postcss": "^8.5.6"
   },
   "scripts": {
     "test": "ava && eslint *.js"
